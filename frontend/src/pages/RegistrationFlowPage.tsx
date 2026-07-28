@@ -8,17 +8,28 @@ import { Moon, User, Mail, Lock, CalendarDays, Ruler, Scale, Heart, Sparkles } f
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 
+const parseNumber = (value: unknown) => {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+    const parsed = Number(trimmed);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  }
+  if (typeof value === 'number') return value;
+  return undefined;
+};
+
 const schema = z.object({
   accountType: z.enum(['myself', 'loved-one']),
   name: z.string().min(2, 'Enter your name'),
   relationship: z.string().optional(),
   lovedOneName: z.string().optional(),
-  lovedOneAge: z.number().min(1).optional(),
+  lovedOneAge: z.preprocess(parseNumber, z.number().min(1).optional()),
   dateOfBirth: z.string().optional(),
-  height: z.number().positive().optional(),
-  weight: z.number().positive().optional(),
-  cycleLength: z.number().positive().optional(),
-  periodLength: z.number().positive().optional(),
+  height: z.preprocess(parseNumber, z.number().positive().optional()),
+  weight: z.preprocess(parseNumber, z.number().positive().optional()),
+  cycleLength: z.preprocess(parseNumber, z.number().positive().optional()),
+  periodLength: z.preprocess(parseNumber, z.number().positive().optional()),
   email: z.string().email('Enter a valid email'),
   password: z.string().min(6, 'At least 6 characters'),
 });
