@@ -69,22 +69,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       cycleLength?: number,
       periodLength?: number,
     ) => {
-      const { data } = await api.post('/auth/register', {
-        accountType,
-        name,
-        relationship,
-        lovedOneName,
-        lovedOneAge,
-        dateOfBirth,
-        height,
-        weight,
-        cycleLength,
-        periodLength,
-        email,
-        password,
-      });
-      persistUser(data.user, data.token);
-      return data.user;
+      try {
+        const { data } = await api.post('/auth/register', {
+          accountType,
+          name,
+          relationship,
+          lovedOneName,
+          lovedOneAge,
+          dateOfBirth,
+          height,
+          weight,
+          cycleLength,
+          periodLength,
+          email,
+          password,
+        });
+        persistUser(data.user, data.token);
+        return data.user;
+      } catch (error: unknown) {
+        const message =
+          error && typeof error === 'object' && 'response' in error && error.response && typeof (error as any).response.data === 'object'
+            ? (error as any).response.data.message
+            : 'Could not create account. Try again.';
+        throw new Error(message || 'Could not create account. Try again.');
+      }
     },
     [persistUser],
   );

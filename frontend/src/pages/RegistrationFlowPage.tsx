@@ -83,8 +83,9 @@ export function RegistrationFlowPage() {
       );
       toast('Welcome to SkyLove. 🌸');
       navigate('/app');
-    } catch {
-      toast('Could not create account. Try again.', 'error');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Could not create account. Try again.';
+      toast(message, 'error');
     }
   };
 
