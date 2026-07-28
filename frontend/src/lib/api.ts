@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { storage } from './storage';
 
-const api = axios.create({ baseURL: '/api', timeout: 10_000 });
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  timeout: 10_000,
+});
 
 api.interceptors.request.use((config) => {
   const token = storage.getToken();
