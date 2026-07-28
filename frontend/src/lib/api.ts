@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { storage } from './storage';
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? '';
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: apiBaseUrl ? `${apiBaseUrl.replace(/\/+$/, '')}/api` : '/api',
   timeout: 10_000,
 });
 

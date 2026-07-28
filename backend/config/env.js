@@ -10,6 +10,11 @@ function requireEnv(key) {
   return value;
 }
 
+function normalizeUrl(value) {
+  if (!value) return '';
+  return value.trim().replace(/\/+$/, '');
+}
+
 export const env = {
   PORT: process.env.PORT || '8787',
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -17,7 +22,7 @@ export const env = {
   JWT_SECRET: process.env.JWT_SECRET || 'change-me',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
   COOKIE_SECRET: process.env.COOKIE_SECRET || 'cookie-secret',
-  CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
+  CLIENT_URL: normalizeUrl(process.env.CLIENT_URL || 'http://localhost:5173'),
   SMTP_HOST: process.env.SMTP_HOST || process.env.EMAIL_HOST || '',
   SMTP_PORT: process.env.SMTP_PORT || process.env.EMAIL_PORT || '587',
   SMTP_USER: process.env.SMTP_USER || process.env.EMAIL_USER || '',
