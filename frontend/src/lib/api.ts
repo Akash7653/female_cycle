@@ -5,7 +5,7 @@ const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '')
 const externalApi = Boolean(apiBaseUrl);
 const api = axios.create({
   baseURL: apiBaseUrl ? `${apiBaseUrl}/api/` : '/api',
-  timeout: 10_000,
+  timeout: 30_000,
 });
 
 api.interceptors.request.use((config) => {
