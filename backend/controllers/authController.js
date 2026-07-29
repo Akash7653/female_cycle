@@ -75,9 +75,9 @@ export async function register(req, res) {
 
   const token = signToken(user._id);
 
-  try {
-    await sendEmail(email, 'Welcome to SkyLove Cycle 🌸', `Hi ${name},\n\nWelcome to SkyLove Cycle. Your private wellness journey begins now.\n\nWith love,\nThe SkyLove Team`);
-  } catch { /* email optional */ }
+  sendEmail(email, 'Welcome to SkyLove Cycle 🌸', `Hi ${name},\n\nWelcome to SkyLove Cycle. Your private wellness journey begins now.\n\nWith love,\nThe SkyLove Team`).catch((error) => {
+    console.error('Welcome email failed:', error?.message ?? error);
+  });
 
   res.status(201).json({ token, user: sanitize(user) });
 }
@@ -118,9 +118,9 @@ export async function forgotPassword(req, res) {
   await user.save();
 
   const link = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset?token=${token}`;
-  try {
-    await sendEmail(email, 'SkyLove — Reset your password', `Reset link: ${link}`);
-  } catch { /* email optional */ }
+  sendEmail(email, 'SkyLove — Reset your password', `Reset link: ${link}`).catch((error) => {
+    console.error('Password reset email failed:', error?.message ?? error);
+  });
 
   res.json({ message: 'If that email exists, a reset link has been sent.' });
 }

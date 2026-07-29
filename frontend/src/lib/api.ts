@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { storage } from './storage';
 
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
+const envApiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '');
+const fallbackApiBaseUrl = import.meta.env.PROD ? 'https://female-cycle.onrender.com' : '';
+const apiBaseUrl = envApiBaseUrl || fallbackApiBaseUrl;
 const externalApi = Boolean(apiBaseUrl);
 const api = axios.create({
-  baseURL: apiBaseUrl ? `${apiBaseUrl}/api/` : '/api',
-  timeout: 30_000,
+  baseURL: externalApi ? `${apiBaseUrl}/api/` : '/api/',
+  timeout: 60_000,
 });
 
 api.interceptors.request.use((config) => {

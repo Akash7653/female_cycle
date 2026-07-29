@@ -14,16 +14,29 @@ function getTransporter() {
   return transporter;
 }
 
+function timeoutPromise(ms) {
+  return new Promise((_, reject) => {
+    const timer = setTimeout(() => reject(new Error(`Email send timed out after ${ms}ms`)), ms);
+    timer.unref?.();
+  });
+}
+
 export async function sendEmail(to, subject, text) {
   const t = getTransporter();
   if (!t) {
     console.log(`📧 (email not configured) → ${to}: ${subject}`);
     return;
   }
-  await t.sendMail({
+
+  const sendMailPromise = t.sendMail({
     from: process.env.FROM_EMAIL || 'SkyLove <no-reply@skylove.app>',
     to,
     subject,
     text,
+  });
+
+  return Promise.race([sendMailPromise, timeoutPromise(15000)]).catch((error) => {
+    console.error('Email send failed:', error?.message ?? error);
+    throw error;
   });
 }
