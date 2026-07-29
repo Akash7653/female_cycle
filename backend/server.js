@@ -43,6 +43,8 @@ app.use('/api/auth', authLimiter);
 
 // Health
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'SkyLove Cycle API' }));
+app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'SkyLove Cycle API' }));
+app.get('/', (_req, res) => res.json({ status: 'ok', service: 'SkyLove Cycle API', message: 'SkyLove Cycle backend is running' }));
 
 // Routes
 app.use('/api/auth', authRoutes);
