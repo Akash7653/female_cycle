@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import axios from 'axios';
 import { storage } from '@/lib/storage';
 import { api } from '@/lib/api';
 import type { User } from '@/lib/types';
@@ -87,11 +88,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         persistUser(data.user, data.token);
         return data.user;
       } catch (error: unknown) {
-        const message =
-          error && typeof error === 'object' && 'response' in error && error.response && typeof (error as any).response.data === 'object'
-            ? (error as any).response.data.message
-            : 'Could not create account. Try again.';
-        throw new Error(message || 'Could not create account. Try again.');
+        console.error('Register failed', error);
+
+        let message = 'Could not create account. Try again.';
+        if (axios.isAxiosError(error)) {
+          const data = error.response?.data;
+          if (typeof data === 'string') {
+            message = data;
+          } else if (data && typeof data === 'object' && 'message' in data && typeof data.message === 'string') {
+            message = data.message;
+          }
+          if (!message && error.message) {
+            message = error.message;
+          }
+        } else if (error instanceof Error) {
+          message = error.message;
+        }
+
+        throw new Error(message);
       }
     },
     [persistUser],
