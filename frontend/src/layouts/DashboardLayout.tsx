@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Sidebar, MobileTopBar } from '@/components/Sidebar';
+import { BottomNav } from '@/components/BottomNav';
 import { X } from 'lucide-react';
 
 export function DashboardLayout() {
@@ -44,9 +45,10 @@ export function DashboardLayout() {
 
         <div className="flex-1 min-w-0">
           <MobileTopBar onMenu={() => setMobileOpen(true)} />
-          <main className="p-4 sm:p-6 lg:p-8">
+          <main className="p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8">
             <Outlet />
           </main>
+          <BottomNav />
         </div>
       </div>
     </div>
