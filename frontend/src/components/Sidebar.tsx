@@ -121,7 +121,7 @@ export function MobileTopBar({ onMenu }: { onMenu: () => void }) {
   const isDark = theme === 'dark';
 
   return (
-    <header className="glass sticky top-0 z-30 flex items-center justify-between px-4 py-3 lg:hidden">
+    <header className="glass sticky top-0 z-30 flex items-center justify-between px-4 py-3 lg:hidden bg-white/90 dark:bg-ink-900/90 backdrop-blur-xl">
       <div className="flex items-center gap-2">
         <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary-400 to-secondary-400 text-white">
           <Moon size={18} />

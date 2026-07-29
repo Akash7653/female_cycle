@@ -32,9 +32,9 @@ export function DashboardLayout() {
                 animate={{ x: 0 }}
                 exit={{ x: -300 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="fixed left-0 top-0 z-50 h-full w-72 glass border-r border-white/40 dark:border-white/10 lg:hidden"
+                className="fixed left-0 top-0 z-50 h-full w-72 bg-white/95 dark:bg-ink-900/95 border-r border-white/40 dark:border-white/10 lg:hidden backdrop-blur-xl"
               >
-                <button onClick={() => setMobileOpen(false)} className="absolute right-3 top-3 text-ink-700/60">
+                <button onClick={() => setMobileOpen(false)} className="absolute right-3 top-3 text-ink-700/60 hover:text-ink-900 dark:hover:text-ink-50 transition">
                   <X size={20} />
                 </button>
                 <Sidebar onNavigate={() => setMobileOpen(false)} />
