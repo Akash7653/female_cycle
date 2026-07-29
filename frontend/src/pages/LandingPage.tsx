@@ -53,6 +53,7 @@ export function LandingPage() {
 function NavBar() {
   const { theme, toggle } = useTheme();
   const { user } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
   const isDark = theme === 'dark';
 
   return (
@@ -67,11 +68,14 @@ function NavBar() {
             <p className="text-xs text-ink-700/60 dark:text-ink-50/60">Cycle</p>
           </div>
         </Link>
+
         <nav className="hidden items-center gap-6 md:flex">
           <a href="#features" className="text-sm font-medium text-ink-700 dark:text-ink-50/70 hover:text-primary-500 transition">Features</a>
           <a href="#garden" className="text-sm font-medium text-ink-700 dark:text-ink-50/70 hover:text-primary-500 transition">Garden</a>
           <a href="#faq" className="text-sm font-medium text-ink-700 dark:text-ink-50/70 hover:text-primary-500 transition">FAQ</a>
+          <Link to="/app" className="text-sm font-medium text-ink-700 dark:text-ink-50/70 hover:text-primary-500 transition">Dashboard</Link>
         </nav>
+
         <div className="flex items-center gap-3">
           <button onClick={toggle} type="button" className="btn-ghost hidden items-center gap-2 text-sm md:inline-flex">
             {isDark ? <SunMedium size={16} /> : <Moon size={16} />}
@@ -86,10 +90,42 @@ function NavBar() {
               )}
             </Link>
           )}
-          <Link to="/login" className="btn-ghost text-sm">Login</Link>
-          <Link to="/register" className="btn-primary text-sm">Get Started</Link>
+          <div className="hidden md:flex items-center gap-3">
+            <Link to="/login" className="btn-ghost text-sm">Login</Link>
+            <Link to="/register" className="btn-primary text-sm">Get Started</Link>
+          </div>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/70 text-ink-900 shadow-soft transition hover:bg-white dark:bg-ink-900/80 dark:text-ink-50 md:hidden"
+            aria-label="Open navigation"
+            type="button"
+          >
+            <div className="space-y-1">
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+            </div>
+          </button>
         </div>
       </div>
+      {menuOpen && (
+        <div className="border-t border-white/20 bg-white/90 dark:bg-ink-900/90 md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6">
+            <button onClick={toggle} type="button" className="flex items-center gap-2 text-sm font-medium text-ink-700 dark:text-ink-50/80 hover:text-primary-500 transition">
+              {isDark ? <SunMedium size={16} /> : <Moon size={16} />}
+              {isDark ? 'Light Mode' : 'Dark Mode'}
+            </button>
+            <a onClick={() => setMenuOpen(false)} href="#features" className="text-base font-medium text-ink-700 dark:text-ink-50/80 hover:text-primary-500 transition">Features</a>
+            <a onClick={() => setMenuOpen(false)} href="#garden" className="text-base font-medium text-ink-700 dark:text-ink-50/80 hover:text-primary-500 transition">Garden</a>
+            <a onClick={() => setMenuOpen(false)} href="#faq" className="text-base font-medium text-ink-700 dark:text-ink-50/80 hover:text-primary-500 transition">FAQ</a>
+            <Link onClick={() => setMenuOpen(false)} to="/app" className="text-base font-medium text-ink-700 dark:text-ink-50/80 hover:text-primary-500 transition">Dashboard</Link>
+            <div className="flex flex-col gap-3 pt-3">
+              <Link onClick={() => setMenuOpen(false)} to="/login" className="btn-ghost text-sm w-full justify-center">Login</Link>
+              <Link onClick={() => setMenuOpen(false)} to="/register" className="btn-primary text-sm w-full justify-center">Get Started</Link>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
@@ -117,17 +153,24 @@ function Hero() {
             <p className="mt-6 max-w-lg text-lg text-ink-700 dark:text-ink-50/70">
               Understand your body with beautiful insights, personalized tracking, reminders, and wellness support — all in one private, elegant place.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/register" className="btn-primary">
+            <div className="mt-8 grid gap-3 sm:grid-flow-col sm:auto-cols-max sm:grid-cols-[minmax(0,auto)_minmax(0,1fr)]">
+              <Link to="/register" className="btn-primary inline-flex items-center gap-2">
                 Get Started <ArrowRight size={18} />
               </Link>
-              <Link to="/login" className="btn-ghost">Login</Link>
+              <Link to="/login" className="btn-ghost inline-flex items-center justify-center">Login</Link>
             </div>
-            <div className="mt-8 flex items-center gap-4 text-sm text-ink-700/70 dark:text-ink-50/60">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-warning-500 text-warning-500" />)}
-              </div>
-              <span>Loved by thousands of women</span>
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {[
+                { label: 'Avg. cycle accuracy', value: '92%', accent: 'from-primary-400 to-secondary-400' },
+                { label: 'Daily reminders', value: '6', accent: 'from-secondary-400 to-accent-400' },
+                { label: 'Guided insights', value: '24/7', accent: 'from-accent-400 to-primary-400' },
+              ].map((item) => (
+                <div key={item.label} className="glass-card overflow-hidden p-5">
+                  <div className={`mb-3 h-2 rounded-full bg-gradient-to-r ${item.accent}`} />
+                  <p className="text-sm uppercase tracking-[0.2em] text-ink-700 dark:text-ink-50/70">{item.label}</p>
+                  <p className="mt-3 text-3xl font-display font-bold text-ink-900 dark:text-ink-50">{item.value}</p>
+                </div>
+              ))}
             </div>
           </motion.div>
 
