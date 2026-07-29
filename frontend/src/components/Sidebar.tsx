@@ -103,7 +103,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           </div>
           <button
             onClick={() => { logout(); navigate('/'); }}
-            className="grid h-8 w-8 place-items-center rounded-full text-ink-700/60 hover:bg-error-500/10 hover:text-error-500 transition"
+            className="hidden lg:grid h-8 w-8 place-items-center rounded-full text-ink-700/60 hover:bg-error-500/10 hover:text-error-500 transition"
             aria-label="Log out"
           >
             <LogOut size={16} />
@@ -116,6 +116,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
 export function MobileTopBar({ onMenu }: { onMenu: () => void }) {
   const { theme, toggle } = useTheme();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const isDark = theme === 'dark';
 
   return (
@@ -129,6 +131,13 @@ export function MobileTopBar({ onMenu }: { onMenu: () => void }) {
       <div className="flex items-center gap-2">
         <button type="button" onClick={toggle} className="btn-ghost px-3 py-2 text-sm">
           {isDark ? <SunMedium size={16} /> : <Moon size={16} />}
+        </button>
+        <button 
+          onClick={() => { logout(); navigate('/'); }}
+          className="btn-ghost px-3 py-2 text-sm text-error-500 hover:bg-error-50 dark:hover:bg-error-500/10"
+          aria-label="Log out"
+        >
+          <LogOut size={16} />
         </button>
         <button onClick={onMenu} className="btn-ghost px-3 py-2 text-sm">Menu</button>
       </div>
