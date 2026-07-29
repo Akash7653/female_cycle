@@ -87,7 +87,7 @@ export function CalendarPage() {
             tileClassName={tileClassName as never}
             showNavigation={false}
             activeStartDate={activeStartDate}
-            onActiveStartDateChange={({ activeStartDate: next }) => setActiveStartDate(next)}
+            onActiveStartDateChange={({ activeStartDate: next }) => setActiveStartDate(next ?? new Date())}
             showNeighboringMonth={false}
             calendarType="gregory"
           />

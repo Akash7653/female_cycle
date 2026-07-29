@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,18 +20,23 @@ export function RegisterPage() {
   const { register: doRegister } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [serverError, setServerError] = useState<string | null>(null);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', password: '' },
   });
 
   const onSubmit = async (values: FormValues) => {
+    setServerError(null);
+
     try {
       await doRegister(values.name, values.email, values.password);
       toast('Welcome to SkyLove. 🌸');
       navigate('/app');
-    } catch {
-      toast('Could not create account. Try again.', 'error');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Could not create account. Try again.';
+      setServerError(message);
+      toast(message, 'error');
     }
   };
 
@@ -59,6 +65,7 @@ export function RegisterPage() {
         <Field icon={Lock} label="Password" error={errors.password?.message}>
           <input type="password" className="input" placeholder="••••••••" {...register('password')} />
         </Field>
+        {serverError && <p className="text-sm text-error-500">{serverError}</p>}
         <button type="submit" disabled={isSubmitting} className="btn-primary w-full">
           {isSubmitting ? 'Creating…' : 'Create account'} <ArrowRight size={18} />
         </button>

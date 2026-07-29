@@ -65,7 +65,11 @@ export function RegistrationFlowPage() {
     setValue('accountType', step === 'lovedOne' ? 'loved-one' : 'myself');
   }, [step, setValue]);
 
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const onSubmit = async (values: FormValues) => {
+    setServerError(null);
+
     try {
       await doRegister(
         values.name,
@@ -85,6 +89,7 @@ export function RegistrationFlowPage() {
       navigate('/app');
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Could not create account. Try again.';
+      setServerError(message);
       toast(message, 'error');
     }
   };
@@ -172,6 +177,8 @@ export function RegistrationFlowPage() {
           <Field label="Email" error={errors.email?.message}><input type="email" className="input" {...register('email')} /></Field>
           <Field label="Password" error={errors.password?.message}><input type="password" className="input" {...register('password')} /></Field>
         </div>
+
+        {serverError && <p className="text-sm text-error-500">{serverError}</p>}
 
         <button type="submit" disabled={isSubmitting || !['myself', 'lovedOne'].includes(step)} className="btn-primary w-full">
           {isSubmitting ? 'Creating account…' : 'Create account'}
