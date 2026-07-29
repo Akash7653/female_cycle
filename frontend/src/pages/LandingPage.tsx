@@ -83,7 +83,7 @@ function NavBar() {
             {isDark ? 'Light' : 'Dark'}
           </button>
           {user && (
-            <Link to="/app/profile" className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/80 text-sm shadow-soft overflow-hidden dark:bg-ink-900/80">
+            <Link to="/app/profile" className="hidden grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/80 text-sm shadow-soft overflow-hidden dark:bg-ink-900/80 md:grid">
               {user.avatar ? (
                 <img src={user.avatar} alt={user.name ?? 'Profile'} className="h-full w-full object-cover" />
               ) : (
